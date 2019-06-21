@@ -1,0 +1,284 @@
+
+
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="user-profile section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 offset-md-1 col-lg-3 offset-lg-0">
+				<div class="sidebar">
+					<!-- User Widget -->
+					<div class="widget user">
+						<!-- User Image -->
+						<div class="image d-flex justify-content-center">
+							<img src="{% static 'images/user.png'%}" alt="" class="">
+						</div>
+						<!-- User Name -->
+						<h5 class="text-center">{{user.first_name}} {{user.last_name}}</h5>
+					</div>
+					<!-- Dashboard Links -->
+                    <div class="widget user-dashboard-menu">
+                      <ul>  
+                    <li  ><a href="{% url 'accounts:update_user_profile'%}"><i class="fa fa-user"></i>Edit Profile </a></li>
+                            <li class=""><a href="{% url 'accounts:myads'%}"><i class="fa fa-bookmark-o"></i> My Ads</a></li>
+                             <li  class="active"><a href="{% url 'chat:index'%}"><i class="fa fa-comment-o"></i> Chats</a></li>
+                            <li><a href="" data-toggle="modal" data-target="#logoutaccount"><i class="fa fa-cog"></i> Logout</a></li>
+                            <li><a href="" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete
+                  Account</a></li>
+                    </ul>
+          </div>
+				</div>
+                <div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center">
+                        <img src="images/account/Account1.png" class="img-fluid mb-2" alt="">
+                        <h6 class="py-2">Are you sure you want to delete your account?</h6>
+                        <p>Do you really want to delete these records? This process cannot be undone.</p>
+                        <textarea name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
+                      </div>
+                      <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-lg-between justify-content-center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                       <a href="{% url 'accounts:delete_user'%}"> <button type="button" class="btn btn-danger">Delete</button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- delete account popup modal end-->
+                <div class="modal fade" id="logoutaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center">
+                        <img src="images/account/Account1.png" class="img-fluid mb-2" alt="">
+                        <h6 class="py-2">Are you sure you want to Logout your account?</h6>
+                        <p>Keep smiling and selling products</p>
+                      </div>
+                      <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-lg-between justify-content-center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <a href="{% url 'accounts:logout'%}"><button type="button" class="btn btn-danger">Logout</button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+			</div>
+			<div class="col-md-10 offset-md-1 col-lg-9 offset-lg-0">
+				<!-- Edit Profile Welcome Text -->
+				<div class="widget welcome-message">
+					<h2>Chats</h2>
+					<p>Here you can view your sent and received messages</p>
+				</div>
+				<!-- Edit Personal Info -->
+				<div class="row">
+
+						
+ {% comment %} <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">{% endcomment %}
+<link href="{% static 'css/stylechat.css' %}" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<!------ Include the above in your HEAD tag ---------->
+
+{% comment %} <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"> {% endcomment %}
+
+<div class="container">
+<div class="messaging">
+      <div class="inbox_msg">
+        <div class="inbox_people">
+          <div class="headind_srch">
+            <div class="recent_heading">
+              <h4>Recent</h4>
+            </div>
+            <div class="srch_bar">
+              <div class="stylish-input-group">
+                </div>
+            </div>
+          </div>
+
+          <div class="inbox_chat">
+            {% comment %} <div class="chat_list active_chat"> {% endcomment %}
+            {% for msg in message_list %}
+            {% comment %} <h1>{{msg['opp_email']}}</h1> {% endcomment %}
+            {% comment %} <h1>{{msg['opp']}}</h1> {% endcomment %}
+            <a href = "{% url 'chat:room' msg.slug msg.id %}">
+  {% if opp_email == msg.email%}
+           <div class="chat_list active_chat"> 
+            {% endif %}
+            
+            <div class="chat_list">
+              <div class="chat_people">
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="chat_ib">
+                  <h5>{{msg.opp.first_name}}<span class="chat_date">{{msg.date}}</span></h5>
+                  <p>{{msg.message}}</p>
+                  <p style = "font-family = 'Muli', 'sans-serif';"> Title: <a href = "{% url 'product:product_detail_view' slug %}" style = "color:#5672f9;">{{msg.product_title}}</a></p>
+                </div>
+              </div>
+            </div>
+            
+     {% if opp_email == msg.email %}
+              </div> 
+            {% endif %}  
+            </a>
+            {% endfor  %}
+          </div>
+        </div>
+        <div class="mesgs">
+        
+          <div class="msg_history" id = "chat-log">
+            <div class="incoming_msg">
+              {% comment %} <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div> {% endcomment %}
+   <div class="received_msg"> 
+                <div class="received_withd_msg"></div>
+ </div> 
+            </div>
+            <div class="outgoing_msg">
+              <div class="sent_msg"> </div>
+            </div>
+          </div>
+          <div class="type_msg">
+            <div class="input_msg_write">
+              <input type="text" id="chat-message-input" class="write_msg" placeholder=" Type a message" />
+              <button class="msg_send_btn" type="button" id="chat-message-submit" ><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="{%static 'js/reconnecting-websocket.js'%}"></script> 
+
+<script >
+	var x = 100;
+    var room_id = {{ room_id}};
+    var onlineUserEmail ={{author}};
+    var opponentUserEmail ={{opponent}};
+    
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + room_id + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        command = data['message']['command'];
+        if(command=='newmessage'){
+            console.log("here is repition");
+            createMessage(data['message'],command);
+        }
+        else
+        {    console.log(data['message']['messages'].length );
+            for(let i = 0;i<data['message']['messages'].length ;i++)
+            {   
+                createMessage(data['message']['messages'][i], command);
+            }
+        }
+    
+
+    };
+
+    function createMessage(data, command){
+        var command = command
+        var author_name = data['author_name'];
+        var message = data['content'];
+        var date = data['date'];
+        var check = 0;
+        console.log(date)
+        var author_email = data['author_email'];
+        var iDiv = document.createElement('div');
+        var pTag = document.createElement('p');
+        var spandate = document.createElement('span');
+        pTag.textContent = message;
+        pTag.className = 'words';
+        spandate.className = 'time_date';
+        spandate.textContent = date;
+        if (author_email != onlineUserEmail)
+        {	
+            iDiv.className = 'incoming_msg';
+            var innerDivReceived = document.createElement('div');
+            innerDivReceived.className = 'receivedmsg';
+            var innerDiv = document.createElement('div');
+            innerDiv.className = 'received_withd_msg';
+            iDiv.appendChild(innerDivReceived);
+            innerDivReceived.appendChild(innerDiv);
+            innerDiv.appendChild(pTag);
+            innerDiv.appendChild(spandate);
+        }
+        else{
+            
+            iDiv.className = 'outgoing_msg';
+            var innerDiv = document.createElement('div');
+            innerDiv.className = 'sent_msg';
+            iDiv.appendChild(innerDiv);
+            innerDiv.appendChild(pTag);
+            innerDiv.appendChild(spandate);
+        }
+        console.log("alling")
+  
+    document.querySelector("#chat-log").appendChild(iDiv);
+    if(command = 'newmessage')
+    {
+      x = x+1000;
+      $("#chat-log").animate({ scrollTop: $(document).height()+x }, "fast");
+    }
+		
+		
+    }
+	document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+
+    chatSocket.onopen = function(e)
+    {
+        var messageBoxDom = document.querySelector('#chat-log');
+        messageBoxDom.value = '';
+        fetchMessages();
+    }
+    function fetchMessages()
+    {
+      chatSocket.send(JSON.stringify({'command':'fetch_messages', 'room_id' : room_id}));
+    }
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        console.log("clicking agagin and again");
+
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'content': message,
+            'author_email':onlineUserEmail,
+            'opponent_email':opponentUserEmail,
+            'room_id' :room_id,
+            'command': 'new_message',
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock content %}

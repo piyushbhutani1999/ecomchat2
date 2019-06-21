@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ request.user.username }},
+
+Please click on the link to confirm your registration,http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+Once registered , You will be able to post ads and buy products.
+
+
+Keep Smiling
+
+Regards:
+Team MAROON
+{% endautoescape %}
